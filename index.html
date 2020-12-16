@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<title>bulletin_V2</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+	</table>
+	<div class="container">
+		<h2>Remplir le Formulaire</h2>
+		<form action="#" method="get">
+			<div class="form-group">
+				<label for="email">Matière:</label>
+				<select id="matiere" class="form-control">
+
+				</select>
+				<label for="Note">Entrez la Note:</label>
+				<input type="text" id="note" class="form-control">
+			</div>
+			<button type="button" class="btn btn-success">Submit</button>
+			<div class="form-group">
+				<table class="table">
+					<thead>
+						<tr>
+							<th scope="col">Option</th>
+							<th scope="col">Matière</th>
+							<th scope="col">Coeficient</th>
+							<th scope="col">Note</th>
+							<th scope="col">Total</th>
+						</tr>
+					</thead>
+
+				</table>
+		</form>
+		<div class="blocMoyenne">La Moyenne :</div>
+		<script>
+			var matieres = [
+				{ id: 1, intitule: "Cloud", coefficient: 6, note: null },
+				{ id: 2, intitule: "HTML & CSS", coefficient: 3, note: null },
+				{ id: 3, intitule: "JS", coefficient: 2, note: null },
+				{ id: 4, intitule: "Communication", coefficient: 4, note: null },
+				{ id: 5, intitule: "Jquery", coefficient: 2, note: null },
+			]
+
+
+			let moyenne = () => {
+				let resultat = 0
+				let somCoef = 0
+				matieres.forEach(item => {
+					if (item.note) {
+						somCoef += item.coefficient
+						resultat += item.note * item.coefficient
+					}
+				});
+
+				return resultat / somCoef;
+			}
+			matieres.forEach(item =>
+				$("#matiere").append(`<option value=${item.id}>${item.intitule}</option>`)
+			);
+			$(".btn-success").click(function () {
+
+				let matiereSelected = matieres.find(item => item.id == $("#matiere").val());
+				matiereSelected.note = $("#note").val()
+
+				$("table").append(
+					`<tr>
+	      <td><button class="btn btn-danger" id=${matiereSelected.id} >supprimer</button></td>
+	      <td>${matiereSelected.intitule}</td>
+	      <td>${matiereSelected.coefficient}</td>
+	      <td>${$("#note").val()}</td>
+	      <td>${$("#note").val() * matiereSelected.coefficient}</td>
+	   <tr>`	);
+				$("#matiere")
+					.children("option[value=" + $("#matiere").val() + "]")
+					.hide()
+					.parent()
+					.val(0);
+
+				$(".blocMoyenne").text('La Moyenne : ' + moyenne())
+			});
+
+			$(document).on("click", ".btn-danger", function () {
+
+				let matiereSelected = matieres.find(item => item.id == $(this).attr("id"));
+
+				matiereSelected.note = null
+				$(this)
+					.parents("tr")
+					.remove();
+
+				$("#matiere")
+					.children("option[value=" + $(this).attr("id") + "]")
+					.show();
+				$("#matiere").val(0);
+
+
+				$(".blocMoyenne").text('moyenne ' + moyenne())
+
+			});
+		</script>
+	</div>
+</body>
+
+</html>
